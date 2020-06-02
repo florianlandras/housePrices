@@ -1,3 +1,6 @@
+import pandas as pd
+import requests
+
 baseUrl = 'https://www.hemnet.se/salda/'
 city = 'soderkopings-kommun'
 
@@ -33,9 +36,9 @@ nbrDeChambreMax = ""
 def is_not_blank(s):
     return bool(s and s.strip())
 
-url = baseUrl+city
 
-def dataJson () :
+
+def dataJson (url) :
 
     html = requests.get(url) 
     dataLayer = re.findall("dataLayer = (.+?);\n", html.text, re.S)
@@ -45,32 +48,30 @@ def dataJson () :
 
     return cityId
 
-dataJson()
-
-def newUrl() :
+def newUrl(url) :
     
     # si typeBostad & 
     newUrl = ""
     
     if is_not_blank(typeBostad) == False and is_not_blank(sizeMin) == False and is_not_blank(sizeMax) == False and is_not_blank(sizeMin) and is_not_blank(sizeMin) :
         
-        newUrl = baseUrl + "bostader?location_ids%5B%5D=" + str(dataJson()) + "&sold_age=all"
+        newUrl = baseUrl + "bostader?location_ids%5B%5D=" + str(dataJson(url)) + "&sold_age=all"
     
     if is_not_blank(typeBostad) == True and is_not_blank(sizeMin) == False and is_not_blank(sizeMax) == False and is_not_blank(sizeMin) and is_not_blank(sizeMin) :
         
-        newUrl = baseUrl + "bostader?location_ids%5B%5D=" + str(dataJson()) + "&item_types%5B%5D="+ typeBostad + "&sold_age=all"
+        newUrl = baseUrl + "bostader?location_ids%5B%5D=" + str(dataJson(url)) + "&item_types%5B%5D="+ typeBostad + "&sold_age=all"
     
    #if is_not_blank(typeBostad) == False and is_not_blank(sizeMin) == True and is_not_blank(sizeMax) == False :
         
-        newUrl = baseUrl + "bostader?location_ids%5B%5D=" + str(dataJson()) + "&item_types%5B%5D="+ typeBostad + "&sold_age=all"
+        newUrl = baseUrl + "bostader?location_ids%5B%5D=" + str(dataJson(url)) + "&item_types%5B%5D="+ typeBostad + "&sold_age=all"
         
     #if is_not_blank(typeBostad) == False and is_not_blank(sizeMin) == False and is_not_blank(sizeMax) == True :
         
-        newUrl = baseUrl + "bostader?location_ids%5B%5D=" + str(dataJson()) + "&item_types%5B%5D="+ typeBostad + "&sold_age=all"
+        newUrl = baseUrl + "bostader?location_ids%5B%5D=" + str(dataJson(url)) + "&item_types%5B%5D="+ typeBostad + "&sold_age=all"
         
     #if is_not_blank(typeBostad) == True and is_not_blank(sizeMin) == True and is_not_blank(sizeMax) == True :
         
-        newUrl = baseUrl + "bostader?location_ids%5B%5D=" + str(dataJson()) + "&item_types%5B%5D="+ typeBostad + "&sold_age=all"
+        newUrl = baseUrl + "bostader?location_ids%5B%5D=" + str(dataJson(url)) + "&item_types%5B%5D="+ typeBostad + "&sold_age=all"
     return newUrl
 
 # nouvelle adresse format : https://www.hemnet.se/salda/bostader?location_ids%5B%5D=18002&item_types%5B%5D=villa&sold_age=all
@@ -78,4 +79,6 @@ def newUrl() :
 
 #newUrl = baseUrl + "bostader?location_ids%5B%5D=" + str(dataJson()) + "&sold_age=all"
 
-newUrl()
+if __name__ == "__main__":
+    url = baseUrl+city
+    newUrl(url)
