@@ -20,6 +20,7 @@ def getdef(url) :
     areaArray = []
     nbrRoomArray = []
     priceArray = []
+    priceFinalArray = []
     pricePerSquareMeterArray = []
     adressArray = []
 
@@ -40,8 +41,20 @@ def getdef(url) :
     b = soup.find_all('span', class_ = "item-result-meta-attribute-is-bold item-link" )
     #b2 / adress city
     b2 = soup.find_all('span', class_ = "item-link" )
+    
     # c / final price
     c = soup.find_all('span', class_ = "sold-property-listing__subheading sold-property-listing--left" )
+    
+    for elem in c :
+        temp1 = re.findall(r"[-+]?\d*\.\d+|\d+", elem.get_text())
+        priceFinalArray.append(temp1)
+        
+    df2 = pd.DataFrame(data=priceFinalArray, columns=["1","2", "3"])
+    df2.replace(to_replace=[None], value=np.nan, inplace=True)
+    df2 = df2.fillna("")
+    df2["Final Price"] = df2["1"] + df2["2"] + df2["3"]
+    df["Final Price"] = df2["Final Price"]
+    
     # d / % difference between market entrance price and final price
     d = soup.find_all('div', class_ = "sold-property-listing__price-change" )
     # e / date de la vente
@@ -59,6 +72,13 @@ def getdef(url) :
     # k/ lien du bien immobilier pour plus d'infos
     k = soup.find_all('a', class_ = "item-link-container" )
     
+    # Convert values to float
+    
+    df["Area"] = df["Area"].astype(float)
+    df["Rooms"] = df["Rooms"].astype(float)
+    df["Final Price"] = df["Final Price"].astype(float)
+
+
 
     return df
 
@@ -66,4 +86,5 @@ if __name__ == "__main__":
     baseUrl = 'https://www.hemnet.se/salda/'
     city = 'soderkopings-kommun'
     url = baseUrl + city
-    getdef(url)
+    df = getdef(url)
+    print(df)
