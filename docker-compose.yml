@@ -2,6 +2,7 @@ version: '3'
 
 services: 
     backend-services:
+        restart: always
         build: ./backend
         volumes:
             - ./backend:/usr/src/app
