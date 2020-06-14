@@ -9,15 +9,28 @@ app = flask.Flask(__name__)
 def index():
     return "Hello, you are on backend flask server"
 
-@app.route('/api/test/')
-def test():
-    testDict = {
-        'keyA': "string",
-        'keyB': [1,4,6,3,4],
-        'keyC': 34,
-    }
 
-    return flask.jsonify(testDict)
+testDict = [
+    {
+        'id': 0,
+        'data': "test1"
+    },
+    {
+        'id': 1,
+        'data': 'test2' 
+    }
+]
+
+@app.route('/api/test', methods=['GET'])
+def test():
+    # https://programminghistorian.org/en/lessons/creating-apis-with-python-and-flask
+    #get key from url
+    if 'id' in flask.request.args:
+        id = int(flask.request.args['id'])
+    else:
+        return "Error: No id field provided. Please specify an id."
+
+    return flask.jsonify(testDict[id])
 
 @app.route('/api/getData/')
 def data():
