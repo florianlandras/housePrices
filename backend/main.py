@@ -1,7 +1,7 @@
 import flask
 import json
-from postProcess.getdata import getdef
-from postProcess.geturl import newUrl
+from postProcess.similarData import getdef
+from postProcess.findSimilar import newUrl
 import pandas
 
 app = flask.Flask(__name__)

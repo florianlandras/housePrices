@@ -5,8 +5,7 @@ import requests
 import re
 import pandas as pd
 
-baseUrl = 'https://www.hemnet.se/salda/'
-city = 'soderkopings-kommun'
+
 
 
 
@@ -89,6 +88,8 @@ def newUrl(url) :
 
 
 if __name__ == "__main__":
+    baseUrl = 'https://www.hemnet.se/salda/'
+    city = 'soderkopings-kommun'
     url = baseUrl+city
     newUrl(url)
     
