@@ -1,4 +1,5 @@
 import flask
+import json
 from postProcess.getdata import getdef
 from postProcess.geturl import newUrl
 import pandas
@@ -25,12 +26,15 @@ testDict = [
 def test():
     # https://programminghistorian.org/en/lessons/creating-apis-with-python-and-flask
     #get key from url
-    if 'id' in flask.request.args:
-        id = int(flask.request.args['id'])
-    else:
-        return "Error: No id field provided. Please specify an id."
 
-    return flask.jsonify(testDict[id])
+    argList = []
+    valueList = []
+
+    for arg in flask.request.args:
+        argList.append(arg) #access to all key
+        valueList.append(flask.request.args[arg]) #access to all value
+
+    return flask.jsonify(dict(zip(argList,valueList)))
 
 @app.route('/api/getData/')
 def data():
